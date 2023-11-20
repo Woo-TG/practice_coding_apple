@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'style.dart' as style;
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+
 
 void main() {
   runApp(
@@ -18,7 +22,19 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var tab = 0;  // state에 현재 UI의 상태 저장
+  var tab = 0;// state 현재 UI의 상태 저장
+
+  getData() async {
+    var result = await http.get(Uri.parse('https://codingapple1.github.io/app/data.json'));
+    var result2 = jsonDecode(result.body);
+    print(result2);
+  }
+  
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +49,7 @@ class _MyAppState extends State<MyApp> {
           )
         ]
       ),
-      body: [Text('홈'), Text('샵페이지')][tab],    // state에 따라 UI 어떻게 보일지 작성
+      body: [Home(), Text('샵페이지')][tab],    // state 따라 UI 어떻게 보일지 작성
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
@@ -47,6 +63,37 @@ class _MyAppState extends State<MyApp> {
           BottomNavigationBarItem(icon: Icon(Icons.shopping_bag_outlined), label: '샵')
         ],
       ),
+    );
+  }
+}
+
+class Home extends StatelessWidget {
+  const Home({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        itemCount: 3,
+        itemBuilder: (context, i) {
+          return Column(
+            children: [
+              Image.network('http://codingapple1.github.io/kona.jpg'),
+              Container(
+                constraints: BoxConstraints(maxWidth: 600),
+                padding: EdgeInsets.all(20),
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('좋아요 100'),
+                    Text('글쓴이'),
+                    Text('글내용'),
+                  ],
+                ),
+              )
+            ],
+          );
+        }
     );
   }
 }
