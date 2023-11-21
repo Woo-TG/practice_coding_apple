@@ -3,6 +3,9 @@ import 'style.dart' as style;
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/rendering.dart';  // 스크롤 관련 함수
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+
 
 void main() {
   runApp(MaterialApp(
@@ -21,6 +24,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var tab = 0; // state 현재 UI의 상태 저장
   var data = [];
+  var userImage;
 
   addData(a){
     setState(() {
@@ -60,7 +64,18 @@ class _MyAppState extends State<MyApp> {
           actions: [
             IconButton(
               icon: Icon(Icons.add_box_outlined),
-              onPressed: () {},
+              onPressed: () async {
+                var picker = ImagePicker();
+                var image = await picker.pickImage(source: ImageSource.gallery);
+                if(image != null) {
+                  setState(() {
+                    userImage = File(image.path);  // state의 변경이므로
+                  });
+                }
+
+                Navigator.push(context, 
+                MaterialPageRoute(builder: (context) => Upload(userImage : userImage)));
+              },
               iconSize: 30,
             )
           ]),
@@ -142,3 +157,30 @@ class _HomeState extends State<Home> {
 
   }
 }
+
+class Upload extends StatelessWidget {
+  const Upload({super.key, this.userImage});
+  final userImage;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Image.file(userImage),
+          Text('이미지업로드화면'),
+          TextField(),
+          IconButton(
+              onPressed: (){
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.close)
+          ),
+        ],
+      ),
+    );
+  }
+}
+
