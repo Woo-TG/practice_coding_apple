@@ -1,3 +1,4 @@
+import 'notification.dart';
 import 'package:flutter/material.dart';
 import 'style.dart' as style;
 import 'dart:convert';
@@ -104,6 +105,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {    // 실행
     super.initState();
+    initNotification(context);
     saveData();
     getData();
   }
@@ -111,6 +113,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){showNotification2();}, child: Text('+'),),
       appBar: AppBar(
           title: Text(
             'Instagram',
