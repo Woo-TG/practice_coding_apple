@@ -1,3 +1,5 @@
+import 'package:contact/shop.dart';
+
 import 'notification.dart';
 import 'package:flutter/material.dart';
 import 'style.dart' as style;
@@ -8,9 +10,17 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 
-void main() {
+
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,);
+
   runApp(MultiProvider(      //store 원하는 위젯에 등록하기, materialApp를 감싸면 자식 위젯 모두 사용가능
     providers: [
       ChangeNotifierProvider(create: (c) => Store1()),
@@ -144,12 +154,9 @@ class _MyAppState extends State<MyApp> {
             )
           ]),
       body: [
-        Home(
-          data: data,
-          addData: addData,
-        ),
-        Text('샵페이지')
-      ][tab], // state 따라 UI 어떻게 보일지 작성
+        Home(data: data, addData: addData,),
+        Shop()][tab], // state 따라 UI 어떻게 보일지 작성
+
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
