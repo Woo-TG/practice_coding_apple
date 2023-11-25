@@ -2,7 +2,7 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="primee"
+        android:label="com.prime.contact"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

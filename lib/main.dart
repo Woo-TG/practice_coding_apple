@@ -1,5 +1,4 @@
 import 'package:contact/shop.dart';
-
 import 'notification.dart';
 import 'package:flutter/material.dart';
 import 'style.dart' as style;
@@ -12,8 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-
-
 
 
 void main() async{
@@ -122,6 +119,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: (){showNotification2();}, child: Text('+'),),
@@ -153,9 +151,10 @@ class _MyAppState extends State<MyApp> {
               iconSize: 30,
             )
           ]),
-      body: [
-        Home(data: data, addData: addData,),
-        Shop()][tab], // state 따라 UI 어떻게 보일지 작성
+      // body: [ MediaQuery.of(context).size.width > 600
+      //         ? HomeLarge()
+      //         : Home(data: data, addData: addData,), Shop()][tab], // state 따라 UI 어떻게 보일지 작성
+      body: [Home(data: data, addData: addData), Shop()][tab],
 
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
@@ -229,7 +228,7 @@ class _HomeState extends State<Home> {
                         PageRouteBuilder(
                             pageBuilder: (context, a1, a2) => Profile(),  // 파라미터 3개 그냥 채워야 됨 , c 의미없음
                             transitionsBuilder: (context, a1, a2, child) =>  // a1:animation object - 새 페이지 전환효과(0~1)
-                                FadeTransition(opacity: a1, child: child),   // a2: 기존 페이지 에니메이션, 4번째: 현재 보여주는 위젯
+                                FadeTransition(opacity: a1, child: child),   // a2: 기존 페이지 애니메이션, 4번째: 현재 보여주는 위젯
 
                               // SlideTransition(       // 슬라이드 형식
                               //     position: Tween(
@@ -244,7 +243,10 @@ class _HomeState extends State<Home> {
                 ),
                 Text('좋아요 ${widget.data[i]['likes']}'),
                 Text('${widget.data[i]['date']}'),
-                Text(widget.data[i]['content']),
+                Text(widget.data[i]['content'], style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width > 600 ? 30 : 16
+                  // fontSize: fontsize1(context)
+                ),),
               ],
             );
           });
@@ -253,6 +255,16 @@ class _HomeState extends State<Home> {
     }
   }
 }
+
+// fontsize1(context) {
+//   if (MediaQuery.of(context).size.width > 600) {
+//     return 30;
+//   } else {
+//     return 16;
+//   }
+// }
+
+
 
 class Upload extends StatelessWidget {
   const Upload(
